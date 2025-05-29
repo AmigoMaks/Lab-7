@@ -1,0 +1,37 @@
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+template <typename T>
+double average(T* array, int size) {
+    T sum = 0;
+    for (int i = 0; i < size; ++i) {
+        sum += array[i];
+    }
+    return static_cast<double>(sum) / size;
+}
+
+template <>
+double average<const char*>(const char** array, int size) {
+    int totalLength = 0;
+    for (int i = 0; i < size; ++i) {
+        totalLength += strlen(array[i]);
+    }
+    return static_cast<double>(totalLength) / size;
+}
+
+int main() {
+    int intArray[] = {10, 20, 30, 40, 50};
+    int intSize = sizeof(intArray) / sizeof(intArray[0]);
+    cout << "Int: " << average(intArray, intSize) << endl;
+
+    double doubleArray[] = {1.5, 2.5, 3.5, 4.5};
+    int doubleSize = sizeof(doubleArray) / sizeof(doubleArray[0]);
+    cout << "Double: " << average(doubleArray, doubleSize) << endl;
+
+    const char* strArray[] = {"one", "eleven", "eight"};
+    int strSize = sizeof(strArray) / sizeof(strArray[0]);
+    cout << "String: " << average(strArray, strSize) << endl;
+
+    return 0;
+}
