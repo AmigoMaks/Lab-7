@@ -1,0 +1,110 @@
+#include <iostream>
+using namespace std;
+
+template <typename T>
+class CircularQueue {
+private:
+    T* data;
+    int front;
+    int rear;
+    int size;
+    int capacity;
+
+public:
+    CircularQueue(int cap) {
+        capacity = cap;
+        data = new T[capacity];
+        front = -1;
+        rear = -1;
+        size = 0;
+    }
+
+    ~CircularQueue() {
+        delete[] data;
+    }
+
+    bool isFull() const {
+        return size == capacity;
+    }
+
+    bool isEmpty() const {
+        return size == 0;
+    }
+
+    void enqueue(const T& value) {
+        if (isFull()) {
+            cout << "Queue is full. Cannot enqueue " << value << endl;
+            return;
+        }
+
+        rear = (rear + 1) % capacity;
+        data[rear] = value;
+
+        if (front == -1)
+            front = rear;
+
+        size++;
+    }
+
+    void dequeue() {
+        if (isEmpty()) {
+            cout << "Queue is empty. Cannot dequeue." << endl;
+            return;
+        }
+
+        front = (front + 1) % capacity;
+        size--;
+
+        if (size == 0) {
+            front = -1;
+            rear = -1;
+        }
+    }
+
+    T peek() const {
+        if (isEmpty()) {
+            throw out_of_range("Queue is empty.");
+        }
+        return data[front];
+    }
+
+    void display() const {
+        if (isEmpty()) {
+            cout << "Queue is empty." << endl;
+            return;
+        }
+
+        cout << "Queue: ";
+        for (int i = 0; i < size; i++) {
+            int index = (front + i) % capacity;
+            cout << data[index] << " ";
+        }
+        cout << endl;
+    }
+};
+
+int main() {
+    CircularQueue<int> q(5);
+
+    q.enqueue(10);
+    q.enqueue(20);
+    q.enqueue(30);
+    q.enqueue(40);
+    q.enqueue(50);
+
+    q.display();
+
+    q.dequeue();
+    q.dequeue();
+
+    q.display();
+
+    q.enqueue(60);
+    q.enqueue(70);
+
+    q.display();
+
+    cout << "Front element: " << q.peek() << endl;
+
+    return 0;
+}
