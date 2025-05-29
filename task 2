@@ -1,0 +1,76 @@
+#include <iostream>
+#include <cstring> 
+using namespace std;
+
+template <typename T>
+void myswap(T& a, T& b) {
+    T temp = a;
+    a = b;
+    b = temp;
+}
+
+template <typename T>
+void quickSort(T arr[], int left, int right) {
+    if (left >= right) return;
+
+    T pivot = arr[(left + right) / 2];
+    int i = left, j = right;
+
+    while (i <= j) {
+        while (arr[i] < pivot) i++;
+        while (arr[j] > pivot) j--;
+        if (i <= j) {
+            myswap(arr[i], arr[j]);
+            i++;
+            j--;
+        }
+    }
+
+    if (left < j) quickSort(arr, left, j);
+    if (i < right) quickSort(arr, i, right);
+}
+
+template <>
+void quickSort<char*>(char* arr[], int left, int right) {
+    if (left >= right) return;
+
+    char* pivot = arr[(left + right) / 2];
+    int i = left, j = right;
+
+    while (i <= j) {
+        while (strcmp(arr[i], pivot) < 0) i++;
+        while (strcmp(arr[j], pivot) > 0) j--;
+        if (i <= j) {
+            myswap(arr[i], arr[j]);
+            i++;
+            j--;
+        }
+    }
+
+    if (left < j) quickSort(arr, left, j);
+    if (i < right) quickSort(arr, i, right);
+}
+
+int main() {
+    int intArray[] = {7, 2, 1, 9, 3};
+    int sizeInt = sizeof(intArray) / sizeof(intArray[0]);
+
+    quickSort(intArray, 0, sizeInt - 1);
+
+    cout << "Int: ";
+    for (int i = 0; i < sizeInt; ++i)
+        cout << intArray[i] << " ";
+    cout << endl;
+
+    const char* strArray[] = {"banana", "apple", "cherry", "mango"};
+    int sizeStr = sizeof(strArray) / sizeof(strArray[0]);
+
+    quickSort(strArray, 0, sizeStr - 1);
+
+    cout << "Char: ";
+    for (int i = 0; i < sizeStr; ++i)
+        cout << strArray[i] << " ";
+    cout << endl;
+
+    return 0;
+}
